@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER THREAT MAP — Live Global Attacks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header">
+        <div class="header-left">
+            <span class="logo">&#9763; CYBER THREAT MAP</span>
+            <span class="status-dot"></span>
+            <span class="status-text">LIVE</span>
+        </div>
+        <div class="header-right">
+            <div class="stat-box">
+                <span class="stat-label">ATTACKS / MIN</span>
+                <span class="stat-value" id="attacks-per-min">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">TOTAL ATTACKS</span>
+                <span class="stat-value" id="total-attacks">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">UPTIME</span>
+                <span class="stat-value" id="uptime">00:00:00</span>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <aside id="feed-panel">
+            <div class="panel-header">
+                <span>&#9889; LIVE ATTACK FEED</span>
+            </div>
+            <div id="feed-list"></div>
+        </aside>
+
+        <div id="globe-container"></div>
+    </main>
+
+    <footer id="stats-bar">
+        <div class="stats-section">
+            <h3>TOP ATTACKER COUNTRIES</h3>
+            <div id="top-countries"></div>
+        </div>
+        <div class="stats-section">
+            <h3>TOP ATTACK TYPES</h3>
+            <div id="top-types"></div>
+        </div>
+        <div class="stats-section">
+            <h3>TOP TARGETED PORTS</h3>
+            <div id="top-ports"></div>
+        </div>
+    </footer>
+
+    <script src="//cdn.jsdelivr.net/npm/globe.gl@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>
