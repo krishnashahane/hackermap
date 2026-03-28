@@ -133,10 +133,12 @@ Displayed live on the globe with animated attack paths.
 
 **Krishna Shahane**
 
-Self-taught programmer building tools to explore technology, security, and global systems.
-
 ---
 
 ## ⭐ Support
 
 If you find this project interesting, consider giving it a **star ⭐** to support development.
+
+## License
+
+MIT
