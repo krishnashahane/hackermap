@@ -159,6 +159,14 @@ let globe;
 function initGlobe() {
     const container = document.getElementById('globe-container');
 
+    if (typeof Globe !== 'function') {
+        const notice = document.createElement('div');
+        notice.className = 'runtime-error';
+        notice.textContent = 'The globe library could not be loaded. Check your connection and reload the page.';
+        container.appendChild(notice);
+        return false;
+    }
+
     globe = Globe()(container)
         .globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
         .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
@@ -186,15 +194,18 @@ function initGlobe() {
 
     // Auto-rotate
     const controls = globe.controls();
-    controls.autoRotate = true;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    controls.autoRotate = !reduceMotion;
     controls.autoRotateSpeed = CONFIG.GLOBE_ROTATE_SPEED;
-    controls.enableDamping = true;
+    controls.enableDamping = !reduceMotion;
 
     handleResize();
     window.addEventListener('resize', handleResize);
+    return true;
 }
 
 function handleResize() {
+    if (!globe) return;
     const container = document.getElementById('globe-container');
     globe.width(container.clientWidth);
     globe.height(container.clientHeight);
@@ -215,19 +226,41 @@ const feedList = document.getElementById('feed-list');
 function addFeedItem(attack) {
     const el = document.createElement('div');
     el.className = 'feed-item feed-new';
-    el.innerHTML = `
-        <div class="feed-time">${formatTime(attack.timestamp)}</div>
-        <div class="feed-route">
-            ${attack.srcFlag} <span class="feed-ip">${attack.srcIP}</span>
-            <span class="arrow">→</span>
-            ${attack.tgtFlag} <span class="feed-ip">${attack.tgtIP}</span>
-            <span class="feed-badge badge-${attack.badge}">${attack.type}</span>
-            <span class="feed-port">:${attack.port}</span>
-        </div>
-    `;
+
+    const time = document.createElement('div');
+    time.className = 'feed-time';
+    time.textContent = formatTime(attack.timestamp);
+
+    const route = document.createElement('div');
+    route.className = 'feed-route';
+
+    const sourceFlag = document.createTextNode(`${attack.srcFlag} `);
+    const sourceIp = document.createElement('span');
+    sourceIp.className = 'feed-ip';
+    sourceIp.textContent = attack.srcIP;
+
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow';
+    arrow.textContent = '→';
+
+    const targetFlag = document.createTextNode(` ${attack.tgtFlag} `);
+    const targetIp = document.createElement('span');
+    targetIp.className = 'feed-ip';
+    targetIp.textContent = attack.tgtIP;
+
+    const badge = document.createElement('span');
+    badge.className = `feed-badge badge-${attack.badge}`;
+    badge.textContent = attack.type;
+
+    const port = document.createElement('span');
+    port.className = 'feed-port';
+    port.textContent = `:${attack.port}`;
+
+    route.append(sourceFlag, sourceIp, arrow, targetFlag, targetIp, badge, port);
+    el.append(time, route);
 
     el.addEventListener('click', () => {
-        globe.pointOfView({ lat: attack.tgtLat, lng: attack.tgtLng, altitude: 1.5 }, 1000);
+        if (globe) globe.pointOfView({ lat: attack.tgtLat, lng: attack.tgtLng, altitude: 1.5 }, 1000);
     });
 
     feedList.prepend(el);
@@ -292,23 +325,41 @@ function updateBarChart(containerId, data, limit, colors) {
     const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]).slice(0, limit);
     const max = sorted.length ? sorted[0][1] : 1;
 
-    container.innerHTML = sorted.map(([label, count]) => {
+    container.replaceChildren();
+    sorted.forEach(([label, count]) => {
         const pct = Math.round((count / max) * 100);
         const color = typeof colors === 'string' ? colors : (colors[label] || '#00ff41');
-        return `
-            <div class="stat-row">
-                <span class="stat-row-label">${label}</span>
-                <div class="stat-bar-bg">
-                    <div class="stat-bar-fill" style="width:${pct}%;background:${color};color:${color};"></div>
-                </div>
-                <span class="stat-row-count">${count}</span>
-            </div>
-        `;
-    }).join('');
+
+        const row = document.createElement('div');
+        row.className = 'stat-row';
+
+        const labelEl = document.createElement('span');
+        labelEl.className = 'stat-row-label';
+        labelEl.textContent = label;
+
+        const barBg = document.createElement('div');
+        barBg.className = 'stat-bar-bg';
+
+        const barFill = document.createElement('div');
+        barFill.className = 'stat-bar-fill';
+        barFill.style.width = `${pct}%`;
+        barFill.style.background = color;
+        barFill.style.color = color;
+
+        barBg.appendChild(barFill);
+
+        const countEl = document.createElement('span');
+        countEl.className = 'stat-row-count';
+        countEl.textContent = String(count);
+
+        row.append(labelEl, barBg, countEl);
+        container.appendChild(row);
+    });
 }
 
 // --- MAIN LOOP ---
 function processAttack() {
+    if (!globe) return;
     const attack = simulator.generateAttack();
     addArc(attack);
     addFeedItem(attack);
@@ -331,7 +382,7 @@ function startSimulation() {
 
 // --- INIT ---
 function init() {
-    initGlobe();
+    if (!initGlobe()) return;
     startSimulation();
     setInterval(updateStats, CONFIG.STATS_INTERVAL_MS);
     updateStats();
