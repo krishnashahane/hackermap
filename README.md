@@ -1,143 +1,74 @@
-# 🌍 Real-Time Global Hacker Map
+# HackerMap
 
-A **live cyber threat visualization system** that displays ongoing cyber attacks across the world on an interactive globe.
-The project aggregates data from **honeypots and public threat intelligence feeds** and maps attack origins and targets in real time.
+HackerMap is a browser-only cybersecurity visualization demo. It generates **simulated attack events locally in JavaScript** and renders them as animated paths on a 3D globe.
 
-The goal is to make global cyber activity **visible, understandable, and educational**.
+It is not a live threat-intelligence feed, does not contact honeypots, and does not perform network attacks.
 
----
+## Features
 
-## 🚀 Features
+- Animated 3D globe using globe.gl / WebGL.
+- Locally generated simulated attack events.
+- Simulated DDoS, port scan, brute force, malware, SQL injection, and XSS categories.
+- Synthetic source/target locations, IP addresses, ports, severity, feed entries, and aggregate charts.
+- Responsive layout and reduced-motion support.
+- No backend, database, or build step.
 
-* 🌐 **Live Global Attack Visualization**
-  Displays cyber attacks in real time on a 3D globe.
+## Run locally
 
-* 🛰 **Threat Intelligence Feeds**
-  Collects data from multiple security feeds and honeypots.
+HackerMap is a static site. Node.js and a package manager are not required.
 
-* ⚡ **Real-Time Streaming**
-  Uses WebSockets / streaming pipelines to update attacks instantly.
+For the most reliable local experience, serve the directory over HTTP:
 
-* 📍 **IP Geolocation Mapping**
-  Converts attacker IPs into geographical locations.
-
-* 🔎 **Attack Type Classification**
-  Detects categories such as:
-
-  * SSH brute force
-  * DDoS attempts
-  * Port scans
-  * Malware probes
-
-* 📊 **Analytics Dashboard**
-
-  * Top attacking countries
-  * Most targeted ports
-  * Attack frequency
-
----
-
-## 🧠 How It Works
-
-1. **Honeypots capture malicious traffic**
-2. **Threat feeds provide additional attack data**
-3. **Backend processes incoming events**
-4. **IP addresses are geolocated**
-5. **Frontend renders attacks on a live globe**
-
-Architecture pipeline:
-
-```
-Threat Feeds / Honeypots
-        │
-        ▼
-   Data Collector
-        │
-        ▼
-  Stream Processor
-        │
-        ▼
-   WebSocket API
-        │
-        ▼
- Interactive Globe UI
+```bash
+cd hackermap
+python3 -m http.server 8080
 ```
 
----
+Open `http://127.0.0.1:8080/` in a browser.
 
-## 🛠 Tech Stack
+The same files can be deployed to GitHub Pages or another static host.
 
-**Frontend**
+## Runtime dependency
 
-* Three.js / WebGL
-* React
-* Globe visualization libraries
+The page pins globe.gl to version 2.46.2 through jsDelivr. That is currently the latest globe.gl release, and public security databases report no direct vulnerabilities for that package version. citeturn164509search0turn164509search2
 
-**Backend**
+The globe imagery is also loaded from the versioned jsDelivr package tree used by three-globe.
 
-* Node.js
-* WebSocket server
-* Stream processing
+Because the app intentionally uses a CDN dependency, an internet connection is required for the globe library and its imagery. When the dependency cannot be loaded, the UI now reports the failure instead of repeatedly throwing errors.
 
-**Data Sources**
+## Data model
 
-* Honeypots
-* Threat intelligence feeds
-* Public cybersecurity datasets
+Every event is generated locally from a fixed set of weighted locations and attack types. Displayed IP addresses are synthetic. No external attack telemetry is consumed.
 
----
+The UI explicitly says **SIMULATED LIVE** so the visualization is not mistaken for real-time threat intelligence.
 
-## 📡 Data Sources (Example)
+## Security and reliability
 
-* Open threat intelligence feeds
-* Network honeypots
-* Security research datasets
-* Malware traffic monitoring
+- No user input is executed.
+- Feed and chart content is inserted with DOM APIs instead of `innerHTML`.
+- The external globe dependency is version-pinned.
+- The page uses a restrictive Content Security Policy and a strict referrer policy.
+- The app does not issue arbitrary network requests or scan remote hosts.
+- The globe fails gracefully when the CDN dependency is unavailable.
+- `prefers-reduced-motion` disables continuous globe rotation and decorative animations.
+- Event history, rendered feed items, and globe arcs are bounded to prevent unbounded client-side growth.
 
----
+## Project structure
 
-## 🎯 Purpose
-
-This project is built for:
-
-* cybersecurity researchers
-* developers learning about cyber threats
-* security visualization
-* educational demonstrations
-
-It shows how **global cyber activity happens constantly and automatically**.
-
----
-
-## ⚠️ Disclaimer
-
-This project is for **educational and research purposes only**.
-
-It **does not perform attacks** and only visualizes publicly available security data or honeypot data.
-
----
-
-## 📸 Demo
-
-```
-Incoming attack → Russia → US (SSH brute force)
-Incoming attack → China → Germany (Port scan)
-Incoming attack → Brazil → India (Malware probe)
+```text
+hackermap/
+├── index.html
+├── app.js
+├── style.css
+├── public/
+│   └── favicon.svg
+├── LICENSE
+└── README.md
 ```
 
-Displayed live on the globe with animated attack paths.
+## Limitations
 
----
-
-## 🧑‍💻 Author
-
-**Krishna Shahane**
-
----
-
-## ⭐ Support
-
-If you find this project interesting, consider giving it a **star ⭐** to support development.
+This is a visualization/simulation project, not a threat-detection system. Do not treat its generated events or statistics as evidence of real-world malicious activity.
 
 ## License
 
