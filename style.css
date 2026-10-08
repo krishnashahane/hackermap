@@ -269,3 +269,26 @@ body {
     #stats-bar { grid-template-columns: 1fr; }
     body { grid-template-rows: 50px 1fr 260px; }
 }
+
+
+.runtime-error {
+    max-width: 520px;
+    margin: auto;
+    padding: 20px;
+    color: var(--red);
+    border: 1px solid rgba(255, 0, 64, 0.35);
+    background: rgba(255, 0, 64, 0.08);
+    text-align: center;
+    line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .status-dot,
+    .feed-item {
+        animation: none;
+    }
+
+    .stat-bar-fill {
+        transition: none;
+    }
+}
