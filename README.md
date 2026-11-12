@@ -1,75 +1,82 @@
 # HackerMap
 
-HackerMap is a browser-only cybersecurity visualization demo. It generates **simulated attack events locally in JavaScript** and renders them as animated paths on a 3D globe.
+HackerMap is a static, browser-based cybersecurity visualization. It generates synthetic attack events locally and displays them as animated routes on an interactive 3D globe.
 
-It is not a live threat-intelligence feed, does not contact honeypots, and does not perform network attacks.
+> **Simulation only:** HackerMap does not receive real threat telemetry, monitor networks, contact honeypots, scan hosts, or perform attacks. All events, locations, statistics, and routes are generated in the browser. Treat them as illustrative data only.
 
-## Features
+## Capabilities
 
-- Animated 3D globe using globe.gl / WebGL.
-- Locally generated simulated attack events.
-- Simulated DDoS, port scan, brute force, malware, SQL injection, and XSS categories.
-- Synthetic source/target locations, IP addresses, ports, severity, feed entries, and aggregate charts.
+- Interactive 3D globe with animated event routes.
+- Synthetic DDoS, port-scan, brute-force, malware, SQL injection, and XSS event categories.
+- Simulated source and target locations, ports, severity levels, feed entries, and aggregate statistics.
+- Bounded event history, globe arcs, feed entries, and scheduled burst events.
 - Responsive layout and reduced-motion support.
-- No backend, database, or build step.
+- No backend, database, build system, or runtime application dependencies beyond the pinned globe.gl CDN script.
 
 ## Run locally
 
-HackerMap is a static site. Node.js and a package manager are not required.
-
-For the most reliable local experience, serve the directory over HTTP:
+A modern browser and a local HTTP server are recommended. Node.js is only needed for the optional repository checks.
 
 ```bash
+git clone https://github.com/krishnashahane/hackermap.git
 cd hackermap
 python3 -m http.server 8080
 ```
 
-Open `http://127.0.0.1:8080/` in a browser.
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-The same files can be deployed to GitHub Pages or another static host.
+You can also deploy the static files to GitHub Pages or another static host. The globe library and its imagery are loaded from jsDelivr, so an internet connection is required for the full visualization. If the library fails to load, the page displays an error instead of starting the simulation.
 
-## Runtime dependency
+## Synthetic data
 
-The page pins globe.gl to version 2.46.2 through jsDelivr. That is currently the latest globe.gl release, and public security databases report no direct vulnerabilities for that package version. citeturn164509search0turn164509search2
+Generated IP addresses use the RFC 5737 documentation-only ranges:
 
-The globe imagery is also loaded from the versioned jsDelivr package tree used by three-globe.
+- `192.0.2.0/24`
+- `198.51.100.0/24`
+- `203.0.113.0/24`
 
-Because the app intentionally uses a CDN dependency, an internet connection is required for the globe library and its imagery. When the dependency cannot be loaded, the UI now reports the failure instead of repeatedly throwing errors.
+These addresses are reserved for examples and documentation. The country and city labels are illustrative source/target selections from a fixed in-code dataset; they do not represent observed attribution or the location of real attackers.
 
-## Data model
+## Quality checks
 
-Every event is generated locally from a fixed set of weighted locations and attack types. Displayed IP addresses are synthetic. No external attack telemetry is consumed.
+The project intentionally has no third-party development dependencies. With Node.js 20 or newer:
 
-The UI explicitly says **SIMULATED LIVE** so the visualization is not mistaken for real-time threat intelligence.
+```bash
+npm test
+npm run check
+```
 
-## Security and reliability
+- `npm test` runs built-in Node.js tests for the static application contract and security-sensitive invariants.
+- `npm run check` performs a JavaScript syntax check.
 
-- No user input is executed.
-- Feed and chart content is inserted with DOM APIs instead of `innerHTML`.
-- The external globe dependency is version-pinned.
-- The page uses a restrictive Content Security Policy and a strict referrer policy.
-- The app does not issue arbitrary network requests or scan remote hosts.
-- The globe fails gracefully when the CDN dependency is unavailable.
-- `prefers-reduced-motion` disables continuous globe rotation and decorative animations.
-- Event history, rendered feed items, and globe arcs are bounded to prevent unbounded client-side growth.
+GitHub Actions runs these checks for pushes and pull requests to `main`.
+
+## Security and operational notes
+
+- Dynamic feed and chart values are written with safe DOM APIs.
+- Globe tooltip values are HTML-escaped before being passed to the globe library.
+- The globe.gl script is version-pinned and constrained by a Content Security Policy.
+- No user input is evaluated or executed.
+- Simulation history, visible feed entries, active arcs, and pending burst timers are bounded or cleaned up.
+- Timers stop on page exit, and globe sizing responds to container changes.
+- Reduced-motion preferences disable continuous globe rotation and decorative animation.
+
+For production hosting, configure HTTP response headers at the hosting layer as well. In particular, set `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, and a `frame-ancestors` directive in the HTTP Content-Security-Policy header. The `frame-ancestors` directive is not enforced when supplied through a CSP meta element.
 
 ## Project structure
 
 ```text
 hackermap/
-├── index.html
+├── .github/workflows/quality.yml
+├── tests/quality.test.mjs
 ├── app.js
+├── index.html
 ├── style.css
-├── public/
-│   └── favicon.svg
-├── LICENSE
-└── README.md
+├── package.json
+├── README.md
+└── LICENSE
 ```
-
-## Limitations
-
-This is a visualization/simulation project, not a threat-detection system. Do not treat its generated events or statistics as evidence of real-world malicious activity.
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).
