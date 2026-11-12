@@ -1,0 +1,14 @@
+{
+  "name": "hackermap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A browser-based visualization of synthetic cybersecurity events.",
+  "scripts": {
+    "check": "node --check app.js && node --check tests/quality.test.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
