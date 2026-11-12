@@ -159,6 +159,11 @@ let globe;
 function initGlobe() {
     const container = document.getElementById('globe-container');
 
+    if (!container) {
+        console.error('HackerMap: required #globe-container element is missing.');
+        return false;
+    }
+
     if (typeof Globe !== 'function') {
         const notice = document.createElement('div');
         notice.className = 'runtime-error';
@@ -183,13 +188,18 @@ function initGlobe() {
         .arcDashAnimateTime(CONFIG.ARC_FLIGHT_TIME)
         .arcStroke(CONFIG.ARC_STROKE)
         .arcsTransitionDuration(0)
-        .arcLabel(d => `
-            <div style="font-family:Share Tech Mono,monospace;font-size:12px;background:rgba(0,0,0,0.85);padding:8px 12px;border:1px solid ${d.color};border-radius:4px;">
-                <div style="color:${d.color};font-weight:bold;margin-bottom:4px;">${d.type}</div>
-                <div>${d.srcFlag} ${d.srcIP} → ${d.tgtFlag} ${d.tgtIP}</div>
-                <div style="color:#666;font-size:10px;">Port ${d.port} · ${d.severity.toUpperCase()}</div>
-            </div>
-        `)
+        .arcLabel(d => {
+            const root = document.createElement('div');
+            root.className = 'globe-tooltip';
+            const heading = document.createElement('strong');
+            heading.textContent = d.type;
+            const route = document.createElement('div');
+            route.textContent = `${d.srcFlag} ${d.srcIP} → ${d.tgtFlag} ${d.tgtIP}`;
+            const metadata = document.createElement('small');
+            metadata.textContent = `Port ${d.port} · ${d.severity.toUpperCase()}`;
+            root.append(heading, route, metadata);
+            return root;
+        })
         .pointOfView({ lat: 20, lng: 10, altitude: 2.2 });
 
     // Auto-rotate
@@ -207,8 +217,12 @@ function initGlobe() {
 function handleResize() {
     if (!globe) return;
     const container = document.getElementById('globe-container');
-    globe.width(container.clientWidth);
-    globe.height(container.clientHeight);
+    if (!container) return;
+
+    const width = Math.max(1, Math.floor(container.clientWidth));
+    const height = Math.max(1, Math.floor(container.clientHeight));
+    globe.width(width);
+    globe.height(height);
 }
 
 // --- ARC MANAGEMENT ---
@@ -259,8 +273,19 @@ function addFeedItem(attack) {
     route.append(sourceFlag, sourceIp, arrow, targetFlag, targetIp, badge, port);
     el.append(time, route);
 
-    el.addEventListener('click', () => {
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', `Focus globe on simulated target ${attack.tgtCity}, ${attack.tgtCountry}`);
+
+    const focusTarget = () => {
         if (globe) globe.pointOfView({ lat: attack.tgtLat, lng: attack.tgtLng, altitude: 1.5 }, 1000);
+    };
+    el.addEventListener('click', focusTarget);
+    el.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            focusTarget();
+        }
     });
 
     feedList.prepend(el);
@@ -358,6 +383,11 @@ function updateBarChart(containerId, data, limit, colors) {
 }
 
 // --- MAIN LOOP ---
+let attackTimer = null;
+let statsTimer = null;
+let pendingBurstTimers = [];
+let resizeObserver = null;
+
 function processAttack() {
     if (!globe) return;
     const attack = simulator.generateAttack();
@@ -367,25 +397,48 @@ function processAttack() {
 }
 
 function startSimulation() {
-    // Regular attacks
-    setInterval(() => {
+    if (attackTimer !== null) return;
+
+    attackTimer = window.setInterval(() => {
         processAttack();
 
-        // Occasional burst
         if (Math.random() < CONFIG.BURST_CHANCE) {
             for (let i = 0; i < CONFIG.BURST_COUNT; i++) {
-                setTimeout(() => processAttack(), (i + 1) * 150);
+                const timer = window.setTimeout(() => {
+                    pendingBurstTimers = pendingBurstTimers.filter(id => id !== timer);
+                    processAttack();
+                }, (i + 1) * 150);
+                pendingBurstTimers.push(timer);
             }
         }
     }, CONFIG.ATTACK_INTERVAL_MS);
+
+    statsTimer = window.setInterval(updateStats, CONFIG.STATS_INTERVAL_MS);
+    updateStats();
 }
 
-// --- INIT ---
+function stopSimulation() {
+    if (attackTimer !== null) window.clearInterval(attackTimer);
+    if (statsTimer !== null) window.clearInterval(statsTimer);
+    attackTimer = null;
+    statsTimer = null;
+    pendingBurstTimers.forEach(window.clearTimeout);
+    pendingBurstTimers = [];
+}
+
 function init() {
     if (!initGlobe()) return;
     startSimulation();
-    setInterval(updateStats, CONFIG.STATS_INTERVAL_MS);
-    updateStats();
+
+    const container = document.getElementById('globe-container');
+    if ('ResizeObserver' in window && container) {
+        resizeObserver = new ResizeObserver(handleResize);
+        resizeObserver.observe(container);
+    } else {
+        window.addEventListener('resize', handleResize, { passive: true });
+    }
+
+    window.addEventListener('pagehide', stopSimulation, { once: true });
 }
 
 init();
