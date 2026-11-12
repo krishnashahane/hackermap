@@ -183,40 +183,50 @@ function initGlobe() {
         return false;
     }
 
-    globe = Globe()(container)
-        .globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
-        .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
-        .backgroundColor('rgba(0,0,0,0)')
-        .atmosphereColor('#00ff41')
-        .atmosphereAltitude(0.2)
-        .arcStartLat(d => d.srcLat)
-        .arcStartLng(d => d.srcLng)
-        .arcEndLat(d => d.tgtLat)
-        .arcEndLng(d => d.tgtLng)
-        .arcColor(d => d.color)
-        .arcDashLength(CONFIG.ARC_DASH_LENGTH)
-        .arcDashGap(CONFIG.ARC_DASH_GAP)
-        .arcDashAnimateTime(CONFIG.ARC_FLIGHT_TIME)
-        .arcStroke(CONFIG.ARC_STROKE)
-        .arcsTransitionDuration(0)
-        .arcLabel(d => `
-            <div class="globe-tooltip">
-                <strong>${escapeHtml(d.type)}</strong>
-                <div>${escapeHtml(d.srcFlag)} ${escapeHtml(d.srcIP)} → ${escapeHtml(d.tgtFlag)} ${escapeHtml(d.tgtIP)}</div>
-                <small>Port ${escapeHtml(d.port)} · ${escapeHtml(d.severity.toUpperCase())}</small>
-            </div>
-        `)
-        .pointOfView({ lat: 20, lng: 10, altitude: 2.2 });
+    try {
+        globe = Globe()(container)
+            .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
+            .bumpImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
+            .backgroundColor('rgba(0,0,0,0)')
+            .atmosphereColor('#00ff41')
+            .atmosphereAltitude(0.2)
+            .arcStartLat(d => d.srcLat)
+            .arcStartLng(d => d.srcLng)
+            .arcEndLat(d => d.tgtLat)
+            .arcEndLng(d => d.tgtLng)
+            .arcColor(d => d.color)
+            .arcDashLength(CONFIG.ARC_DASH_LENGTH)
+            .arcDashGap(CONFIG.ARC_DASH_GAP)
+            .arcDashAnimateTime(CONFIG.ARC_FLIGHT_TIME)
+            .arcStroke(CONFIG.ARC_STROKE)
+            .arcsTransitionDuration(0)
+            .arcLabel(d => `
+                <div class="globe-tooltip">
+                    <strong>${escapeHtml(d.type)}</strong>
+                    <div>${escapeHtml(d.srcFlag)} ${escapeHtml(d.srcIP)} → ${escapeHtml(d.tgtFlag)} ${escapeHtml(d.tgtIP)}</div>
+                    <small>Port ${escapeHtml(d.port)} · ${escapeHtml(d.severity.toUpperCase())}</small>
+                </div>
+            `)
+            .pointOfView({ lat: 20, lng: 10, altitude: 2.2 });
 
-    // Auto-rotate
-    const controls = globe.controls();
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    controls.autoRotate = !reduceMotion;
-    controls.autoRotateSpeed = CONFIG.GLOBE_ROTATE_SPEED;
-    controls.enableDamping = !reduceMotion;
+        const controls = globe.controls();
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        controls.autoRotate = !reduceMotion;
+        controls.autoRotateSpeed = CONFIG.GLOBE_ROTATE_SPEED;
+        controls.enableDamping = !reduceMotion;
 
-    handleResize();
-    return true;
+        handleResize();
+        return true;
+    } catch (error) {
+        console.error('HackerMap: globe initialization failed.', error);
+        const notice = document.createElement('div');
+        notice.className = 'runtime-error';
+        notice.setAttribute('role', 'alert');
+        notice.textContent = 'The 3D globe could not be initialized. Check browser WebGL support and reload the page.';
+        container.replaceChildren(notice);
+        globe = null;
+        return false;
+    }
 }
 
 function handleResize() {
