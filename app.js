@@ -30,46 +30,46 @@ const ATTACK_TYPES = [
 
 // --- GEO LOCATIONS ---
 const LOCATIONS = [
-    { lat: 39.9, lng: 116.4, country: 'China', city: 'Beijing', flag: '🇨🇳', sw: 9, tw: 2, ips: [36,58,106,223] },
-    { lat: 31.2, lng: 121.5, country: 'China', city: 'Shanghai', flag: '🇨🇳', sw: 7, tw: 3, ips: [36,58,106] },
-    { lat: 23.1, lng: 113.3, country: 'China', city: 'Guangzhou', flag: '🇨🇳', sw: 6, tw: 2, ips: [14,58,113] },
-    { lat: 55.8, lng: 37.6, country: 'Russia', city: 'Moscow', flag: '🇷🇺', sw: 8, tw: 2, ips: [5,46,77,95] },
-    { lat: 59.9, lng: 30.3, country: 'Russia', city: 'St Petersburg', flag: '🇷🇺', sw: 5, tw: 1, ips: [5,46,77] },
-    { lat: 37.5, lng: -122.0, country: 'USA', city: 'San Jose', flag: '🇺🇸', sw: 3, tw: 9, ips: [17,23,64,104] },
-    { lat: 40.7, lng: -74.0, country: 'USA', city: 'New York', flag: '🇺🇸', sw: 3, tw: 8, ips: [24,45,66,173] },
-    { lat: 39.0, lng: -77.5, country: 'USA', city: 'Ashburn', flag: '🇺🇸', sw: 2, tw: 10, ips: [3,52,54] },
-    { lat: 47.6, lng: -122.3, country: 'USA', city: 'Seattle', flag: '🇺🇸', sw: 2, tw: 7, ips: [34,44,52] },
-    { lat: 33.7, lng: -84.4, country: 'USA', city: 'Atlanta', flag: '🇺🇸', sw: 2, tw: 6, ips: [12,50,64] },
-    { lat: 51.5, lng: -0.1, country: 'UK', city: 'London', flag: '🇬🇧', sw: 3, tw: 7, ips: [2,5,31,81] },
-    { lat: 50.1, lng: 8.7, country: 'Germany', city: 'Frankfurt', flag: '🇩🇪', sw: 3, tw: 8, ips: [3,46,78,85] },
-    { lat: 52.5, lng: 13.4, country: 'Germany', city: 'Berlin', flag: '🇩🇪', sw: 2, tw: 5, ips: [46,78,85] },
-    { lat: 48.9, lng: 2.3, country: 'France', city: 'Paris', flag: '🇫🇷', sw: 3, tw: 6, ips: [5,51,62,80] },
-    { lat: 35.7, lng: 139.7, country: 'Japan', city: 'Tokyo', flag: '🇯🇵', sw: 2, tw: 7, ips: [27,49,126,133] },
-    { lat: 37.6, lng: 127.0, country: 'S. Korea', city: 'Seoul', flag: '🇰🇷', sw: 3, tw: 6, ips: [1,14,39,61] },
-    { lat: 39.0, lng: 125.8, country: 'N. Korea', city: 'Pyongyang', flag: '🇰🇵', sw: 6, tw: 0, ips: [175] },
-    { lat: 35.7, lng: 51.4, country: 'Iran', city: 'Tehran', flag: '🇮🇷', sw: 6, tw: 1, ips: [2,5,37,78] },
-    { lat: 25.0, lng: 55.3, country: 'UAE', city: 'Dubai', flag: '🇦🇪', sw: 2, tw: 4, ips: [5,82,94] },
-    { lat: 1.3, lng: 103.8, country: 'Singapore', city: 'Singapore', flag: '🇸🇬', sw: 2, tw: 6, ips: [8,13,27,52] },
-    { lat: 19.1, lng: 72.9, country: 'India', city: 'Mumbai', flag: '🇮🇳', sw: 5, tw: 4, ips: [14,27,49,103] },
-    { lat: 28.6, lng: 77.2, country: 'India', city: 'Delhi', flag: '🇮🇳', sw: 4, tw: 3, ips: [14,27,49] },
-    { lat: -23.5, lng: -46.6, country: 'Brazil', city: 'São Paulo', flag: '🇧🇷', sw: 5, tw: 3, ips: [45,131,143,177] },
-    { lat: 52.2, lng: 21.0, country: 'Poland', city: 'Warsaw', flag: '🇵🇱', sw: 3, tw: 3, ips: [5,31,37,46] },
-    { lat: 50.4, lng: 30.5, country: 'Ukraine', city: 'Kyiv', flag: '🇺🇦', sw: 4, tw: 3, ips: [5,37,46,91] },
-    { lat: 41.0, lng: 29.0, country: 'Turkey', city: 'Istanbul', flag: '🇹🇷', sw: 4, tw: 2, ips: [5,31,46,78] },
-    { lat: -33.9, lng: 18.4, country: 'S. Africa', city: 'Cape Town', flag: '🇿🇦', sw: 2, tw: 3, ips: [41,105,154,196] },
-    { lat: 60.2, lng: 24.9, country: 'Finland', city: 'Helsinki', flag: '🇫🇮', sw: 1, tw: 4, ips: [37,62,80,91] },
-    { lat: 45.5, lng: -73.6, country: 'Canada', city: 'Montreal', flag: '🇨🇦', sw: 2, tw: 5, ips: [24,47,99,142] },
-    { lat: -33.8, lng: 151.2, country: 'Australia', city: 'Sydney', flag: '🇦🇺', sw: 2, tw: 5, ips: [1,13,27,49] },
-    { lat: 22.3, lng: 114.2, country: 'Hong Kong', city: 'Hong Kong', flag: '🇭🇰', sw: 4, tw: 5, ips: [14,27,43,103] },
-    { lat: 25.0, lng: 121.5, country: 'Taiwan', city: 'Taipei', flag: '🇹🇼', sw: 3, tw: 5, ips: [1,36,59,114] },
-    { lat: 59.3, lng: 18.1, country: 'Sweden', city: 'Stockholm', flag: '🇸🇪', sw: 2, tw: 4, ips: [2,31,46,80] },
-    { lat: 55.7, lng: 12.6, country: 'Denmark', city: 'Copenhagen', flag: '🇩🇰', sw: 1, tw: 3, ips: [2,5,31,80] },
-    { lat: 48.2, lng: 16.4, country: 'Austria', city: 'Vienna', flag: '🇦🇹', sw: 1, tw: 3, ips: [5,46,77,78] },
-    { lat: 4.6, lng: -74.1, country: 'Colombia', city: 'Bogotá', flag: '🇨🇴', sw: 3, tw: 2, ips: [181,186,190,200] },
-    { lat: 14.6, lng: 121.0, country: 'Philippines', city: 'Manila', flag: '🇵🇭', sw: 3, tw: 2, ips: [49,112,120,124] },
-    { lat: 3.1, lng: 101.7, country: 'Malaysia', city: 'Kuala Lumpur', flag: '🇲🇾', sw: 2, tw: 2, ips: [1,27,49,60] },
-    { lat: 13.8, lng: 100.5, country: 'Thailand', city: 'Bangkok', flag: '🇹🇭', sw: 3, tw: 2, ips: [1,14,27,49] },
-    { lat: 21.0, lng: 105.9, country: 'Vietnam', city: 'Hanoi', flag: '🇻🇳', sw: 5, tw: 1, ips: [1,14,27,42] },
+    { lat: 39.9, lng: 116.4, country: 'China', city: 'Beijing', flag: '🇨🇳', sw: 9, tw: 2 },
+    { lat: 31.2, lng: 121.5, country: 'China', city: 'Shanghai', flag: '🇨🇳', sw: 7, tw: 3 },
+    { lat: 23.1, lng: 113.3, country: 'China', city: 'Guangzhou', flag: '🇨🇳', sw: 6, tw: 2 },
+    { lat: 55.8, lng: 37.6, country: 'Russia', city: 'Moscow', flag: '🇷🇺', sw: 8, tw: 2 },
+    { lat: 59.9, lng: 30.3, country: 'Russia', city: 'St Petersburg', flag: '🇷🇺', sw: 5, tw: 1 },
+    { lat: 37.5, lng: -122.0, country: 'USA', city: 'San Jose', flag: '🇺🇸', sw: 3, tw: 9 },
+    { lat: 40.7, lng: -74.0, country: 'USA', city: 'New York', flag: '🇺🇸', sw: 3, tw: 8 },
+    { lat: 39.0, lng: -77.5, country: 'USA', city: 'Ashburn', flag: '🇺🇸', sw: 2, tw: 10 },
+    { lat: 47.6, lng: -122.3, country: 'USA', city: 'Seattle', flag: '🇺🇸', sw: 2, tw: 7 },
+    { lat: 33.7, lng: -84.4, country: 'USA', city: 'Atlanta', flag: '🇺🇸', sw: 2, tw: 6 },
+    { lat: 51.5, lng: -0.1, country: 'UK', city: 'London', flag: '🇬🇧', sw: 3, tw: 7 },
+    { lat: 50.1, lng: 8.7, country: 'Germany', city: 'Frankfurt', flag: '🇩🇪', sw: 3, tw: 8 },
+    { lat: 52.5, lng: 13.4, country: 'Germany', city: 'Berlin', flag: '🇩🇪', sw: 2, tw: 5 },
+    { lat: 48.9, lng: 2.3, country: 'France', city: 'Paris', flag: '🇫🇷', sw: 3, tw: 6 },
+    { lat: 35.7, lng: 139.7, country: 'Japan', city: 'Tokyo', flag: '🇯🇵', sw: 2, tw: 7 },
+    { lat: 37.6, lng: 127.0, country: 'S. Korea', city: 'Seoul', flag: '🇰🇷', sw: 3, tw: 6 },
+    { lat: 39.0, lng: 125.8, country: 'N. Korea', city: 'Pyongyang', flag: '🇰🇵', sw: 6, tw: 0 },
+    { lat: 35.7, lng: 51.4, country: 'Iran', city: 'Tehran', flag: '🇮🇷', sw: 6, tw: 1 },
+    { lat: 25.0, lng: 55.3, country: 'UAE', city: 'Dubai', flag: '🇦🇪', sw: 2, tw: 4 },
+    { lat: 1.3, lng: 103.8, country: 'Singapore', city: 'Singapore', flag: '🇸🇬', sw: 2, tw: 6 },
+    { lat: 19.1, lng: 72.9, country: 'India', city: 'Mumbai', flag: '🇮🇳', sw: 5, tw: 4 },
+    { lat: 28.6, lng: 77.2, country: 'India', city: 'Delhi', flag: '🇮🇳', sw: 4, tw: 3 },
+    { lat: -23.5, lng: -46.6, country: 'Brazil', city: 'São Paulo', flag: '🇧🇷', sw: 5, tw: 3 },
+    { lat: 52.2, lng: 21.0, country: 'Poland', city: 'Warsaw', flag: '🇵🇱', sw: 3, tw: 3 },
+    { lat: 50.4, lng: 30.5, country: 'Ukraine', city: 'Kyiv', flag: '🇺🇦', sw: 4, tw: 3 },
+    { lat: 41.0, lng: 29.0, country: 'Turkey', city: 'Istanbul', flag: '🇹🇷', sw: 4, tw: 2 },
+    { lat: -33.9, lng: 18.4, country: 'S. Africa', city: 'Cape Town', flag: '🇿🇦', sw: 2, tw: 3 },
+    { lat: 60.2, lng: 24.9, country: 'Finland', city: 'Helsinki', flag: '🇫🇮', sw: 1, tw: 4 },
+    { lat: 45.5, lng: -73.6, country: 'Canada', city: 'Montreal', flag: '🇨🇦', sw: 2, tw: 5 },
+    { lat: -33.8, lng: 151.2, country: 'Australia', city: 'Sydney', flag: '🇦🇺', sw: 2, tw: 5 },
+    { lat: 22.3, lng: 114.2, country: 'Hong Kong', city: 'Hong Kong', flag: '🇭🇰', sw: 4, tw: 5 },
+    { lat: 25.0, lng: 121.5, country: 'Taiwan', city: 'Taipei', flag: '🇹🇼', sw: 3, tw: 5 },
+    { lat: 59.3, lng: 18.1, country: 'Sweden', city: 'Stockholm', flag: '🇸🇪', sw: 2, tw: 4 },
+    { lat: 55.7, lng: 12.6, country: 'Denmark', city: 'Copenhagen', flag: '🇩🇰', sw: 1, tw: 3 },
+    { lat: 48.2, lng: 16.4, country: 'Austria', city: 'Vienna', flag: '🇦🇹', sw: 1, tw: 3 },
+    { lat: 4.6, lng: -74.1, country: 'Colombia', city: 'Bogotá', flag: '🇨🇴', sw: 3, tw: 2 },
+    { lat: 14.6, lng: 121.0, country: 'Philippines', city: 'Manila', flag: '🇵🇭', sw: 3, tw: 2 },
+    { lat: 3.1, lng: 101.7, country: 'Malaysia', city: 'Kuala Lumpur', flag: '🇲🇾', sw: 2, tw: 2 },
+    { lat: 13.8, lng: 100.5, country: 'Thailand', city: 'Bangkok', flag: '🇹🇭', sw: 3, tw: 2 },
+    { lat: 21.0, lng: 105.9, country: 'Vietnam', city: 'Hanoi', flag: '🇻🇳', sw: 5, tw: 1 },
 ];
 
 // --- SEVERITY LEVELS ---
@@ -95,9 +95,20 @@ function randomFrom(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function generateIP(prefixes) {
-    const p = randomFrom(prefixes);
-    return `${p}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*254)+1}`;
+function generateIP() {
+    // RFC 5737 TEST-NET ranges are reserved for documentation and examples.
+    const network = randomFrom(['192.0.2', '198.51.100', '203.0.113']);
+    return `${network}.${Math.floor(Math.random() * 254) + 1}`;
+}
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+    })[character]);
 }
 
 function formatTime(d) {
@@ -135,13 +146,13 @@ class AttackSimulator {
             srcCountry: src.country,
             srcCity: src.city,
             srcFlag: src.flag,
-            srcIP: generateIP(src.ips),
+            srcIP: generateIP(),
             tgtLat: tgt.lat + (Math.random() - 0.5) * 2,
             tgtLng: tgt.lng + (Math.random() - 0.5) * 2,
             tgtCountry: tgt.country,
             tgtCity: tgt.city,
             tgtFlag: tgt.flag,
-            tgtIP: generateIP(tgt.ips),
+            tgtIP: generateIP(),
             port,
         };
     }
@@ -188,18 +199,13 @@ function initGlobe() {
         .arcDashAnimateTime(CONFIG.ARC_FLIGHT_TIME)
         .arcStroke(CONFIG.ARC_STROKE)
         .arcsTransitionDuration(0)
-        .arcLabel(d => {
-            const root = document.createElement('div');
-            root.className = 'globe-tooltip';
-            const heading = document.createElement('strong');
-            heading.textContent = d.type;
-            const route = document.createElement('div');
-            route.textContent = `${d.srcFlag} ${d.srcIP} → ${d.tgtFlag} ${d.tgtIP}`;
-            const metadata = document.createElement('small');
-            metadata.textContent = `Port ${d.port} · ${d.severity.toUpperCase()}`;
-            root.append(heading, route, metadata);
-            return root;
-        })
+        .arcLabel(d => `
+            <div class="globe-tooltip">
+                <strong>${escapeHtml(d.type)}</strong>
+                <div>${escapeHtml(d.srcFlag)} ${escapeHtml(d.srcIP)} → ${escapeHtml(d.tgtFlag)} ${escapeHtml(d.tgtIP)}</div>
+                <small>Port ${escapeHtml(d.port)} · ${escapeHtml(d.severity.toUpperCase())}</small>
+            </div>
+        `)
         .pointOfView({ lat: 20, lng: 10, altitude: 2.2 });
 
     // Auto-rotate
@@ -210,7 +216,6 @@ function initGlobe() {
     controls.enableDamping = !reduceMotion;
 
     handleResize();
-    window.addEventListener('resize', handleResize);
     return true;
 }
 
@@ -438,7 +443,11 @@ function init() {
         window.addEventListener('resize', handleResize, { passive: true });
     }
 
-    window.addEventListener('pagehide', stopSimulation, { once: true });
+    window.addEventListener('pagehide', () => {
+        stopSimulation();
+        if (resizeObserver) resizeObserver.disconnect();
+        window.removeEventListener('resize', handleResize);
+    }, { once: true });
 }
 
 init();
