@@ -25,7 +25,7 @@ test('all application DOM references exist in the HTML document', () => {
 });
 
 test('static runtime assets referenced by HTML exist', () => {
-    for (const [, assetPath] of html.matchAll(/(?:src|href)=["']\.\/([^"']+)["']/g)) {
+    for (const [, assetPath] of html.matchAll(/(?:src|href)=["'](?!https?:|\/\/|#)([^"']+)["']/g)) {
         assert.ok(existsSync(resolve(root, assetPath)), `Missing local asset: ${assetPath}`);
     }
     assert.ok(existsSync(resolve(root, 'LICENSE')));
