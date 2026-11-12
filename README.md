@@ -79,4 +79,4 @@ hackermap/
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT.
